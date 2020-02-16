@@ -15,7 +15,7 @@ namespace BethanysPieShop.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.1.4-rtm-31024")
+                .HasAnnotation("ProductVersion", "2.1.14-servicing-32113")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -32,6 +32,25 @@ namespace BethanysPieShop.Migrations
                     b.HasKey("CategoryId");
 
                     b.ToTable("Categories");
+                });
+
+            modelBuilder.Entity("BethanysPieShop.Models.Feedback", b =>
+                {
+                    b.Property<int>("FeedbackId")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<bool>("ContactMe");
+
+                    b.Property<string>("Email");
+
+                    b.Property<string>("Message");
+
+                    b.Property<string>("Name");
+
+                    b.HasKey("FeedbackId");
+
+                    b.ToTable("Feedbacks");
                 });
 
             modelBuilder.Entity("BethanysPieShop.Models.Order", b =>

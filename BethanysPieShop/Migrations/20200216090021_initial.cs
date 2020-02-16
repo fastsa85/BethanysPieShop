@@ -4,82 +4,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace BethanysPieShop.Migrations
 {
-    public partial class Identity : Migration
+    public partial class initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AlterColumn<string>(
-                name: "ZipCode",
-                table: "Orders",
-                maxLength: 10,
-                nullable: false,
-                oldClrType: typeof(string),
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<string>(
-                name: "State",
-                table: "Orders",
-                maxLength: 10,
-                nullable: true,
-                oldClrType: typeof(string),
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<string>(
-                name: "PhoneNumber",
-                table: "Orders",
-                maxLength: 25,
-                nullable: false,
-                oldClrType: typeof(string),
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<string>(
-                name: "LastName",
-                table: "Orders",
-                maxLength: 50,
-                nullable: false,
-                oldClrType: typeof(string),
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<string>(
-                name: "FirstName",
-                table: "Orders",
-                maxLength: 50,
-                nullable: false,
-                oldClrType: typeof(string),
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<string>(
-                name: "Email",
-                table: "Orders",
-                maxLength: 50,
-                nullable: false,
-                oldClrType: typeof(string),
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<string>(
-                name: "Country",
-                table: "Orders",
-                maxLength: 50,
-                nullable: false,
-                oldClrType: typeof(string),
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<string>(
-                name: "City",
-                table: "Orders",
-                maxLength: 50,
-                nullable: false,
-                oldClrType: typeof(string),
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<string>(
-                name: "AddressLine1",
-                table: "Orders",
-                maxLength: 100,
-                nullable: false,
-                oldClrType: typeof(string),
-                oldNullable: true);
-
             migrationBuilder.CreateTable(
                 name: "AspNetRoles",
                 columns: table => new
@@ -117,6 +45,44 @@ namespace BethanysPieShop.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Categories",
+                columns: table => new
+                {
+                    CategoryId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    CategoryName = table.Column<string>(nullable: true),
+                    Description = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Categories", x => x.CategoryId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Orders",
+                columns: table => new
+                {
+                    OrderId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    FirstName = table.Column<string>(maxLength: 50, nullable: false),
+                    LastName = table.Column<string>(maxLength: 50, nullable: false),
+                    AddressLine1 = table.Column<string>(maxLength: 100, nullable: false),
+                    AddressLine2 = table.Column<string>(nullable: true),
+                    ZipCode = table.Column<string>(maxLength: 10, nullable: false),
+                    City = table.Column<string>(maxLength: 50, nullable: false),
+                    State = table.Column<string>(maxLength: 10, nullable: true),
+                    Country = table.Column<string>(maxLength: 50, nullable: false),
+                    PhoneNumber = table.Column<string>(maxLength: 25, nullable: false),
+                    Email = table.Column<string>(maxLength: 50, nullable: false),
+                    OrderTotal = table.Column<decimal>(nullable: false),
+                    OrderPlaced = table.Column<DateTime>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Orders", x => x.OrderId);
                 });
 
             migrationBuilder.CreateTable(
@@ -225,6 +191,83 @@ namespace BethanysPieShop.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Pies",
+                columns: table => new
+                {
+                    PieId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Name = table.Column<string>(nullable: true),
+                    ShortDescription = table.Column<string>(nullable: true),
+                    LongDescription = table.Column<string>(nullable: true),
+                    AllergyInformation = table.Column<string>(nullable: true),
+                    Price = table.Column<decimal>(nullable: false),
+                    ImageUrl = table.Column<string>(nullable: true),
+                    ImageThumbnailUrl = table.Column<string>(nullable: true),
+                    IsPieOfTheWeek = table.Column<bool>(nullable: false),
+                    InStock = table.Column<bool>(nullable: false),
+                    CategoryId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Pies", x => x.PieId);
+                    table.ForeignKey(
+                        name: "FK_Pies_Categories_CategoryId",
+                        column: x => x.CategoryId,
+                        principalTable: "Categories",
+                        principalColumn: "CategoryId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "OrderDetails",
+                columns: table => new
+                {
+                    OrderDetailId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    OrderId = table.Column<int>(nullable: false),
+                    PieId = table.Column<int>(nullable: false),
+                    Amount = table.Column<int>(nullable: false),
+                    Price = table.Column<decimal>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_OrderDetails", x => x.OrderDetailId);
+                    table.ForeignKey(
+                        name: "FK_OrderDetails_Orders_OrderId",
+                        column: x => x.OrderId,
+                        principalTable: "Orders",
+                        principalColumn: "OrderId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_OrderDetails_Pies_PieId",
+                        column: x => x.PieId,
+                        principalTable: "Pies",
+                        principalColumn: "PieId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ShopingCartItems",
+                columns: table => new
+                {
+                    ShopingCartItemId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    PieId = table.Column<int>(nullable: true),
+                    Amount = table.Column<int>(nullable: false),
+                    ShopingCartId = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ShopingCartItems", x => x.ShopingCartItemId);
+                    table.ForeignKey(
+                        name: "FK_ShopingCartItems_Pies_PieId",
+                        column: x => x.PieId,
+                        principalTable: "Pies",
+                        principalColumn: "PieId",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -263,6 +306,26 @@ namespace BethanysPieShop.Migrations
                 column: "NormalizedUserName",
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_OrderDetails_OrderId",
+                table: "OrderDetails",
+                column: "OrderId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_OrderDetails_PieId",
+                table: "OrderDetails",
+                column: "PieId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Pies_CategoryId",
+                table: "Pies",
+                column: "CategoryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ShopingCartItems_PieId",
+                table: "ShopingCartItems",
+                column: "PieId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -283,74 +346,25 @@ namespace BethanysPieShop.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "OrderDetails");
+
+            migrationBuilder.DropTable(
+                name: "ShopingCartItems");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
 
-            migrationBuilder.AlterColumn<string>(
-                name: "ZipCode",
-                table: "Orders",
-                nullable: true,
-                oldClrType: typeof(string),
-                oldMaxLength: 10);
+            migrationBuilder.DropTable(
+                name: "Orders");
 
-            migrationBuilder.AlterColumn<string>(
-                name: "State",
-                table: "Orders",
-                nullable: true,
-                oldClrType: typeof(string),
-                oldMaxLength: 10,
-                oldNullable: true);
+            migrationBuilder.DropTable(
+                name: "Pies");
 
-            migrationBuilder.AlterColumn<string>(
-                name: "PhoneNumber",
-                table: "Orders",
-                nullable: true,
-                oldClrType: typeof(string),
-                oldMaxLength: 25);
-
-            migrationBuilder.AlterColumn<string>(
-                name: "LastName",
-                table: "Orders",
-                nullable: true,
-                oldClrType: typeof(string),
-                oldMaxLength: 50);
-
-            migrationBuilder.AlterColumn<string>(
-                name: "FirstName",
-                table: "Orders",
-                nullable: true,
-                oldClrType: typeof(string),
-                oldMaxLength: 50);
-
-            migrationBuilder.AlterColumn<string>(
-                name: "Email",
-                table: "Orders",
-                nullable: true,
-                oldClrType: typeof(string),
-                oldMaxLength: 50);
-
-            migrationBuilder.AlterColumn<string>(
-                name: "Country",
-                table: "Orders",
-                nullable: true,
-                oldClrType: typeof(string),
-                oldMaxLength: 50);
-
-            migrationBuilder.AlterColumn<string>(
-                name: "City",
-                table: "Orders",
-                nullable: true,
-                oldClrType: typeof(string),
-                oldMaxLength: 50);
-
-            migrationBuilder.AlterColumn<string>(
-                name: "AddressLine1",
-                table: "Orders",
-                nullable: true,
-                oldClrType: typeof(string),
-                oldMaxLength: 100);
+            migrationBuilder.DropTable(
+                name: "Categories");
         }
     }
 }

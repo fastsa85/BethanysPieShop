@@ -33,6 +33,9 @@
                     <li>
                         <a asp-controller="Contact" asp-action="Index">Contact us</a>
                     </li>
+                    <li>
+                        <a asp-controller="Feedback" asp-action="Index">Feedback</a>
+                    </li>
                     @await Component.InvokeAsync("ShopingCartSummary")
                 </ul>
                 @await Html.PartialAsync("_LoginPartial")

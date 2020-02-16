@@ -28,7 +28,7 @@ namespace BethanysPieShop
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
-        {
+        {            
             services.AddDbContext<AppDbContext>(options =>
                                          options.UseSqlServer(_configurationRoot.GetConnectionString("DefaultConnection")));
             services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<AppDbContext>();
@@ -39,6 +39,7 @@ namespace BethanysPieShop
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddScoped<ShopingCart>(sp => ShopingCart.GetCart(sp));
             services.AddTransient<IOrderRepository, OrderRepository>();
+            services.AddTransient<IFeedbackRepository, FeedbackRepository>();
 
             services.AddMvc();
 
@@ -60,7 +61,7 @@ namespace BethanysPieShop
             }
             app.UseStaticFiles();
             app.UseSession();
-            app.UseIdentity();            
+            app.UseAuthentication();            
             app.UseMvc(routes => {
 
                 routes.MapRoute(
