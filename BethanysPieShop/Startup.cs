@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using System;
 
 namespace BethanysPieShop
 {
@@ -75,7 +76,8 @@ namespace BethanysPieShop
             using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
             {
                 var context = serviceScope.ServiceProvider.GetRequiredService<AppDbContext>();
-                context.Database.EnsureCreated();               
+                context.Database.SetCommandTimeout(TimeSpan.FromMinutes(3));
+                context.Database.EnsureCreated();                
             }
 
             DbInitializer.Seed(app);
