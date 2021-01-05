@@ -73,8 +73,6 @@ namespace BethanysPieShop
                     );
             });
 
-            if (env.IsDevelopment())
-            {
                 using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
                 {
                     var context = serviceScope.ServiceProvider.GetRequiredService<AppDbContext>();
@@ -82,7 +80,7 @@ namespace BethanysPieShop
                     context.Database.EnsureDeleted();
                     context.Database.EnsureCreated();
                 }
-            }
+
 
             DbInitializer.Seed(app);
         }
