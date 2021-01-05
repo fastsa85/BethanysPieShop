@@ -73,11 +73,15 @@ namespace BethanysPieShop
                     );
             });
 
-            using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
+            if (env.IsDevelopment())
             {
-                var context = serviceScope.ServiceProvider.GetRequiredService<AppDbContext>();
-                context.Database.SetCommandTimeout(TimeSpan.FromMinutes(3));
-                context.Database.EnsureCreated();                
+                using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
+                {
+                    var context = serviceScope.ServiceProvider.GetRequiredService<AppDbContext>();
+                    context.Database.SetCommandTimeout(TimeSpan.FromMinutes(3));
+                    context.Database.EnsureDeleted();
+                    context.Database.EnsureCreated();
+                }
             }
 
             DbInitializer.Seed(app);
