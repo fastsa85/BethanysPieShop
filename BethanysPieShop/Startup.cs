@@ -75,8 +75,7 @@ namespace BethanysPieShop
             using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
             {
                 var context = serviceScope.ServiceProvider.GetRequiredService<AppDbContext>();
-                context.Database.EnsureCreated();
-                context.Database.Migrate();
+                context.Database.EnsureCreated();                
             }
 
             DbInitializer.Seed(app);
