@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Reflection;
 
 using OpenQA.Selenium;
@@ -10,7 +11,8 @@ namespace FunctionalTests.Tests
     {        
         public static IWebDriver InitializeDriver()
         {
-            return new ChromeDriver(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location));
+            //return new ChromeDriver(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location));
+            return new ChromeDriver(Environment.CurrentDirectory);
         }
     }
 }
