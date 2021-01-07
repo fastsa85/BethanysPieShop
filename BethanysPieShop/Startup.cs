@@ -76,11 +76,9 @@ namespace BethanysPieShop
                 using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
                 {
                     var context = serviceScope.ServiceProvider.GetRequiredService<AppDbContext>();
-                    context.Database.SetCommandTimeout(TimeSpan.FromMinutes(3));
-                    context.Database.EnsureDeleted();
+                    context.Database.SetCommandTimeout(TimeSpan.FromMinutes(3));                    
                     context.Database.EnsureCreated();
                 }
-
 
             DbInitializer.Seed(app);
         }
