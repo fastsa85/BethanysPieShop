@@ -18,7 +18,7 @@ namespace BethanysPieShop
         {
             _configurationRoot = new ConfigurationBuilder()
                            .SetBasePath(hostingEnvironment.ContentRootPath)
-                           .AddJsonFile($"appsettings.{hostingEnvironment.EnvironmentName}.json")                           
+                           .AddJsonFile($"appsettings.json")                           
                            .Build();
         }
 

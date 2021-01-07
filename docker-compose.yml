@@ -1,0 +1,28 @@
+version: '3.5'
+
+networks:
+    local:
+        name: local
+        
+services:
+    db-server:
+        image: microsoft/mssql-server-linux:latest
+        container_name: db-server
+        environment:
+            - ACCEPT_EULA=Y
+            - MSSQL_TCP_PORT=1433
+            - MSSQL_SA_PASSWORD=QWEasd123!
+        ports:
+            - "1400:1433"
+        networks:
+            - local            
+            
+    bethanyspieshop:
+        build: BethanysPieShop/
+        restart: always
+        ports:
+            - "80:80"
+        depends_on:
+            - db-server
+        networks:
+            - local
