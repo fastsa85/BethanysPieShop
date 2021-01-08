@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using BoDi;
 using OpenQA.Selenium;
-
+using System;
 
 namespace FunctionalTests.Tests
 {
@@ -19,6 +19,10 @@ namespace FunctionalTests.Tests
             var testSettings = new TestSettings();
             configuration.GetSection("TestSettings").Bind(testSettings);
             container.RegisterInstanceAs(testSettings);
+
+            if (testSettings.WebDriverSettings.PageUrl == "")
+                testSettings.WebDriverSettings.PageUrl = Environment.GetEnvironmentVariable("PageUrl");
+
             return container;
         }
     }
