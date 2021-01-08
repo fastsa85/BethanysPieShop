@@ -1,327 +1,63 @@
 {
-    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "sites_BethanysPieShopAppWin_name": {
-            "defaultValue": "BethanysPieShopAppWin",
-            "type": "String"
+        "subscriptionId": {
+            "type": "string"
         },
-        "serverfarms_BethanysPieShopWinPlan_externalid": {
-            "defaultValue": "/subscriptions/f356fbf3-7715-4325-9854-3c501a6b770d/resourceGroups/BethanysPieShopGroup/providers/Microsoft.Web/serverfarms/BethanysPieShopWinPlan",
-            "type": "String"
+        "name": {
+            "type": "string"
+        },
+        "location": {
+            "type": "string"
+        },
+        "hostingPlanName": {
+            "type": "string"
+        },
+        "serverFarmResourceGroup": {
+            "type": "string"
+        },
+        "alwaysOn": {
+            "type": "bool"
+        },
+        "currentStack": {
+            "type": "string"
+        },
+        "phpVersion": {
+            "type": "string"
+        },
+        "errorLink": {
+            "type": "string"
         }
     },
-    "variables": {},
     "resources": [
         {
+            "apiVersion": "2018-11-01",
+            "name": "[parameters('name')]",
             "type": "Microsoft.Web/sites",
-            "apiVersion": "2018-11-01",
-            "name": "[parameters('sites_BethanysPieShopAppWin_name')]",
-            "location": "West Europe",
-            "kind": "app",
+            "location": "[parameters('location')]",
+            "tags": {},
+            "dependsOn": [],
             "properties": {
-                "enabled": true,
-                "hostNameSslStates": [
-                    {
-                        "name": "bethanyspieshopappwin.azurewebsites.net",
-                        "sslState": "Disabled",
-                        "hostType": "Standard"
-                    },
-                    {
-                        "name": "bethanyspieshopappwin.scm.azurewebsites.net",
-                        "sslState": "Disabled",
-                        "hostType": "Repository"
-                    }
-                ],
-                "serverFarmId": "[parameters('serverfarms_BethanysPieShopWinPlan_externalid')]",
-                "reserved": false,
-                "isXenon": false,
-                "hyperV": false,
-                "siteConfig": {},
-                "scmSiteAlsoStopped": false,
-                "clientAffinityEnabled": true,
-                "clientCertEnabled": false,
-                "hostNamesDisabled": false,
-                "containerSize": 0,
-                "dailyMemoryTimeQuota": 0,
-                "httpsOnly": false,
-                "redundancyMode": "None"
-            }
-        },
-        {
-            "type": "Microsoft.Web/sites/config",
-            "apiVersion": "2018-11-01",
-            "name": "[concat(parameters('sites_BethanysPieShopAppWin_name'), '/web')]",
-            "location": "West Europe",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_BethanysPieShopAppWin_name'))]"
-            ],
-            "properties": {
-                "numberOfWorkers": 1,
-                "defaultDocuments": [
-                    "Default.htm",
-                    "Default.html",
-                    "Default.asp",
-                    "index.htm",
-                    "index.html",
-                    "iisstart.htm",
-                    "default.aspx",
-                    "index.php",
-                    "hostingstart.html"
-                ],
-                "netFrameworkVersion": "v4.0",
-                "requestTracingEnabled": false,
-                "remoteDebuggingEnabled": false,
-                "remoteDebuggingVersion": "VS2019",
-                "httpLoggingEnabled": false,
-                "logsDirectorySizeLimit": 35,
-                "detailedErrorLoggingEnabled": false,
-                "publishingUsername": "$BethanysPieShopAppWin",
-                "azureStorageAccounts": {},
-                "scmType": "VSTSRM",
-                "use32BitWorkerProcess": true,
-                "webSocketsEnabled": false,
-                "alwaysOn": true,
-                "managedPipelineMode": "Integrated",
-                "virtualApplications": [
-                    {
-                        "virtualPath": "/",
-                        "physicalPath": "site\\wwwroot",
-                        "preloadEnabled": true
-                    }
-                ],
-                "loadBalancing": "LeastRequests",
-                "experiments": {
-                    "rampUpRules": []
+                "name": "[parameters('name')]",
+                "siteConfig": {
+                    "appSettings": [
+                        {
+                            "name": "ANCM_ADDITIONAL_ERROR_PAGE_LINK",
+                            "value": "[parameters('errorLink')]"
+                        }
+                    ],
+                    "metadata": [
+                        {
+                            "name": "CURRENT_STACK",
+                            "value": "[parameters('currentStack')]"
+                        }
+                    ],
+                    "phpVersion": "[parameters('phpVersion')]",
+                    "alwaysOn": "[parameters('alwaysOn')]"
                 },
-                "autoHealEnabled": false,
-                "localMySqlEnabled": false,
-                "ipSecurityRestrictions": [
-                    {
-                        "ipAddress": "Any",
-                        "action": "Allow",
-                        "priority": 1,
-                        "name": "Allow all",
-                        "description": "Allow all access"
-                    }
-                ],
-                "scmIpSecurityRestrictions": [
-                    {
-                        "ipAddress": "Any",
-                        "action": "Allow",
-                        "priority": 1,
-                        "name": "Allow all",
-                        "description": "Allow all access"
-                    }
-                ],
-                "scmIpSecurityRestrictionsUseMain": false,
-                "http20Enabled": false,
-                "minTlsVersion": "1.2",
-                "ftpsState": "AllAllowed",
-                "reservedInstanceCount": 0
-            }
-        },
-        {
-            "type": "Microsoft.Web/sites/deployments",
-            "apiVersion": "2018-11-01",
-            "name": "[concat(parameters('sites_BethanysPieShopAppWin_name'), '/30340c3a02dd4a87806d62c2f0e656e7')]",
-            "location": "West Europe",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_BethanysPieShopAppWin_name'))]"
-            ],
-            "properties": {
-                "status": 4,
-                "author_email": "N/A",
-                "author": "N/A",
-                "deployer": "VSTS",
-                "message": "{\"type\":\"deployment\",\"commitId\":\"523d03e02767f59e985bf6ff82053d9537eaed1d\",\"buildId\":\"21\",\"releaseId\":\"34\",\"buildNumber\":\"20210106.2\",\"releaseName\":\"Release-34\",\"repoProvider\":\"GitHub\",\"repoName\":\"fastsa85/BethanysPieShop\",\"collectionUrl\":\"https://dev.azure.com/SerhiiFastDeveloper/\",\"teamProject\":\"db7d12d5-1f91-48ba-b96d-aa500ecadcf1\",\"buildProjectUrl\":\"https://dev.azure.com/SerhiiFastDeveloper/db7d12d5-1f91-48ba-b96d-aa500ecadcf1\",\"repositoryUrl\":\"\",\"branch\":\"master\",\"teamProjectName\":\"BethanysPieShop\",\"slotName\":\"production\"}",
-                "start_time": "2021-01-06T08:49:16.6793585Z",
-                "end_time": "2021-01-06T08:49:17.4605809Z",
-                "active": false
-            }
-        },
-        {
-            "type": "Microsoft.Web/sites/deployments",
-            "apiVersion": "2018-11-01",
-            "name": "[concat(parameters('sites_BethanysPieShopAppWin_name'), '/39ae5adb13014b68bdf3116f1b213f2a')]",
-            "location": "West Europe",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_BethanysPieShopAppWin_name'))]"
-            ],
-            "properties": {
-                "status": 4,
-                "author_email": "N/A",
-                "author": "N/A",
-                "deployer": "VSTS",
-                "message": "{\"type\":\"deployment\",\"commitId\":\"5b8ac41602e87abf44278c3f341d54c3e0dc6bff\",\"buildId\":\"25\",\"releaseId\":\"38\",\"buildNumber\":\"20210106.6\",\"releaseName\":\"Release-38\",\"repoProvider\":\"GitHub\",\"repoName\":\"fastsa85/BethanysPieShop\",\"collectionUrl\":\"https://dev.azure.com/SerhiiFastDeveloper/\",\"teamProject\":\"db7d12d5-1f91-48ba-b96d-aa500ecadcf1\",\"buildProjectUrl\":\"https://dev.azure.com/SerhiiFastDeveloper/db7d12d5-1f91-48ba-b96d-aa500ecadcf1\",\"repositoryUrl\":\"\",\"branch\":\"master\",\"teamProjectName\":\"BethanysPieShop\",\"slotName\":\"production\"}",
-                "start_time": "2021-01-06T09:15:21.8260318Z",
-                "end_time": "2021-01-06T09:15:22.7018278Z",
-                "active": false
-            }
-        },
-        {
-            "type": "Microsoft.Web/sites/deployments",
-            "apiVersion": "2018-11-01",
-            "name": "[concat(parameters('sites_BethanysPieShopAppWin_name'), '/3fed4879c6314559800eb2112505f1c5')]",
-            "location": "West Europe",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_BethanysPieShopAppWin_name'))]"
-            ],
-            "properties": {
-                "status": 4,
-                "author_email": "N/A",
-                "author": "N/A",
-                "deployer": "VSTS",
-                "message": "{\"type\":\"deployment\",\"commitId\":\"5b8ac41602e87abf44278c3f341d54c3e0dc6bff\",\"buildId\":\"27\",\"releaseId\":\"40\",\"buildNumber\":\"20210106.8\",\"releaseName\":\"Release-40\",\"repoProvider\":\"GitHub\",\"repoName\":\"fastsa85/BethanysPieShop\",\"collectionUrl\":\"https://dev.azure.com/SerhiiFastDeveloper/\",\"teamProject\":\"db7d12d5-1f91-48ba-b96d-aa500ecadcf1\",\"buildProjectUrl\":\"https://dev.azure.com/SerhiiFastDeveloper/db7d12d5-1f91-48ba-b96d-aa500ecadcf1\",\"repositoryUrl\":\"\",\"branch\":\"master\",\"teamProjectName\":\"BethanysPieShop\",\"slotName\":\"production\"}",
-                "start_time": "2021-01-06T09:29:50.3536601Z",
-                "end_time": "2021-01-06T09:29:51.1360398Z",
-                "active": false
-            }
-        },
-        {
-            "type": "Microsoft.Web/sites/deployments",
-            "apiVersion": "2018-11-01",
-            "name": "[concat(parameters('sites_BethanysPieShopAppWin_name'), '/5e1f940c95a04fefbd24900b1fc5ed81')]",
-            "location": "West Europe",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_BethanysPieShopAppWin_name'))]"
-            ],
-            "properties": {
-                "status": 4,
-                "author_email": "N/A",
-                "author": "N/A",
-                "deployer": "VSTS",
-                "message": "{\"type\":\"deployment\",\"commitId\":\"523d03e02767f59e985bf6ff82053d9537eaed1d\",\"buildId\":\"19\",\"releaseId\":\"32\",\"buildNumber\":\"20210105.19\",\"releaseName\":\"Release-32\",\"repoProvider\":\"GitHub\",\"repoName\":\"fastsa85/BethanysPieShop\",\"collectionUrl\":\"https://dev.azure.com/SerhiiFastDeveloper/\",\"teamProject\":\"db7d12d5-1f91-48ba-b96d-aa500ecadcf1\",\"buildProjectUrl\":\"https://dev.azure.com/SerhiiFastDeveloper/db7d12d5-1f91-48ba-b96d-aa500ecadcf1\",\"repositoryUrl\":\"\",\"branch\":\"master\",\"teamProjectName\":\"BethanysPieShop\",\"slotName\":\"production\"}",
-                "start_time": "2021-01-05T19:59:43.8932432Z",
-                "end_time": "2021-01-05T19:59:44.7682814Z",
-                "active": false
-            }
-        },
-        {
-            "type": "Microsoft.Web/sites/deployments",
-            "apiVersion": "2018-11-01",
-            "name": "[concat(parameters('sites_BethanysPieShopAppWin_name'), '/a0de94d4a7a04dd69ced4cb1820d8745')]",
-            "location": "West Europe",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_BethanysPieShopAppWin_name'))]"
-            ],
-            "properties": {
-                "status": 4,
-                "author_email": "N/A",
-                "author": "N/A",
-                "deployer": "VSTS",
-                "message": "{\"type\":\"deployment\",\"commitId\":\"5b8ac41602e87abf44278c3f341d54c3e0dc6bff\",\"buildId\":\"28\",\"releaseId\":\"41\",\"buildNumber\":\"20210106.9\",\"releaseName\":\"Release-41\",\"repoProvider\":\"GitHub\",\"repoName\":\"fastsa85/BethanysPieShop\",\"collectionUrl\":\"https://dev.azure.com/SerhiiFastDeveloper/\",\"teamProject\":\"db7d12d5-1f91-48ba-b96d-aa500ecadcf1\",\"buildProjectUrl\":\"https://dev.azure.com/SerhiiFastDeveloper/db7d12d5-1f91-48ba-b96d-aa500ecadcf1\",\"repositoryUrl\":\"\",\"branch\":\"master\",\"teamProjectName\":\"BethanysPieShop\",\"slotName\":\"production\"}",
-                "start_time": "2021-01-06T09:51:45.8266524Z",
-                "end_time": "2021-01-06T09:51:46.6087364Z",
-                "active": true
-            }
-        },
-        {
-            "type": "Microsoft.Web/sites/deployments",
-            "apiVersion": "2018-11-01",
-            "name": "[concat(parameters('sites_BethanysPieShopAppWin_name'), '/bfbbbeb31c1e4498a5af15af0bff89af')]",
-            "location": "West Europe",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_BethanysPieShopAppWin_name'))]"
-            ],
-            "properties": {
-                "status": 4,
-                "author_email": "N/A",
-                "author": "N/A",
-                "deployer": "VSTS",
-                "message": "{\"type\":\"deployment\",\"commitId\":\"523d03e02767f59e985bf6ff82053d9537eaed1d\",\"buildId\":\"20\",\"releaseId\":\"33\",\"buildNumber\":\"20210106.1\",\"releaseName\":\"Release-33\",\"repoProvider\":\"GitHub\",\"repoName\":\"fastsa85/BethanysPieShop\",\"collectionUrl\":\"https://dev.azure.com/SerhiiFastDeveloper/\",\"teamProject\":\"db7d12d5-1f91-48ba-b96d-aa500ecadcf1\",\"buildProjectUrl\":\"https://dev.azure.com/SerhiiFastDeveloper/db7d12d5-1f91-48ba-b96d-aa500ecadcf1\",\"repositoryUrl\":\"\",\"branch\":\"master\",\"teamProjectName\":\"BethanysPieShop\",\"slotName\":\"production\"}",
-                "start_time": "2021-01-06T08:34:00.584324Z",
-                "end_time": "2021-01-06T08:34:01.6155597Z",
-                "active": false
-            }
-        },
-        {
-            "type": "Microsoft.Web/sites/deployments",
-            "apiVersion": "2018-11-01",
-            "name": "[concat(parameters('sites_BethanysPieShopAppWin_name'), '/cc7cc1153b714ff3a968add6d2619152')]",
-            "location": "West Europe",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_BethanysPieShopAppWin_name'))]"
-            ],
-            "properties": {
-                "status": 4,
-                "author_email": "N/A",
-                "author": "N/A",
-                "deployer": "VSTS",
-                "message": "{\"type\":\"deployment\",\"commitId\":\"523d03e02767f59e985bf6ff82053d9537eaed1d\",\"buildId\":\"24\",\"releaseId\":\"37\",\"buildNumber\":\"20210106.5\",\"releaseName\":\"Release-37\",\"repoProvider\":\"GitHub\",\"repoName\":\"fastsa85/BethanysPieShop\",\"collectionUrl\":\"https://dev.azure.com/SerhiiFastDeveloper/\",\"teamProject\":\"db7d12d5-1f91-48ba-b96d-aa500ecadcf1\",\"buildProjectUrl\":\"https://dev.azure.com/SerhiiFastDeveloper/db7d12d5-1f91-48ba-b96d-aa500ecadcf1\",\"repositoryUrl\":\"\",\"branch\":\"master\",\"teamProjectName\":\"BethanysPieShop\",\"slotName\":\"production\"}",
-                "start_time": "2021-01-06T09:02:33.4293618Z",
-                "end_time": "2021-01-06T09:02:34.1950226Z",
-                "active": false
-            }
-        },
-        {
-            "type": "Microsoft.Web/sites/deployments",
-            "apiVersion": "2018-11-01",
-            "name": "[concat(parameters('sites_BethanysPieShopAppWin_name'), '/d8bb945474eb4e5292ac3e844e53a118')]",
-            "location": "West Europe",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_BethanysPieShopAppWin_name'))]"
-            ],
-            "properties": {
-                "status": 4,
-                "author_email": "N/A",
-                "author": "N/A",
-                "deployer": "VSTS",
-                "message": "{\"type\":\"deployment\",\"commitId\":\"523d03e02767f59e985bf6ff82053d9537eaed1d\",\"buildId\":\"22\",\"releaseId\":\"35\",\"buildNumber\":\"20210106.3\",\"releaseName\":\"Release-35\",\"repoProvider\":\"GitHub\",\"repoName\":\"fastsa85/BethanysPieShop\",\"collectionUrl\":\"https://dev.azure.com/SerhiiFastDeveloper/\",\"teamProject\":\"db7d12d5-1f91-48ba-b96d-aa500ecadcf1\",\"buildProjectUrl\":\"https://dev.azure.com/SerhiiFastDeveloper/db7d12d5-1f91-48ba-b96d-aa500ecadcf1\",\"repositoryUrl\":\"\",\"branch\":\"master\",\"teamProjectName\":\"BethanysPieShop\",\"slotName\":\"production\"}",
-                "start_time": "2021-01-06T08:52:18.8648657Z",
-                "end_time": "2021-01-06T08:52:19.7403912Z",
-                "active": false
-            }
-        },
-        {
-            "type": "Microsoft.Web/sites/deployments",
-            "apiVersion": "2018-11-01",
-            "name": "[concat(parameters('sites_BethanysPieShopAppWin_name'), '/e8a79e72763b46bdb192a6d97f892f08')]",
-            "location": "West Europe",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_BethanysPieShopAppWin_name'))]"
-            ],
-            "properties": {
-                "status": 4,
-                "author_email": "N/A",
-                "author": "N/A",
-                "deployer": "VSTS",
-                "message": "{\"type\":\"deployment\",\"commitId\":\"523d03e02767f59e985bf6ff82053d9537eaed1d\",\"buildId\":\"23\",\"releaseId\":\"36\",\"buildNumber\":\"20210106.4\",\"releaseName\":\"Release-36\",\"repoProvider\":\"GitHub\",\"repoName\":\"fastsa85/BethanysPieShop\",\"collectionUrl\":\"https://dev.azure.com/SerhiiFastDeveloper/\",\"teamProject\":\"db7d12d5-1f91-48ba-b96d-aa500ecadcf1\",\"buildProjectUrl\":\"https://dev.azure.com/SerhiiFastDeveloper/db7d12d5-1f91-48ba-b96d-aa500ecadcf1\",\"repositoryUrl\":\"\",\"branch\":\"master\",\"teamProjectName\":\"BethanysPieShop\",\"slotName\":\"production\"}",
-                "start_time": "2021-01-06T08:55:53.1564428Z",
-                "end_time": "2021-01-06T08:55:53.9697812Z",
-                "active": false
-            }
-        },
-        {
-            "type": "Microsoft.Web/sites/deployments",
-            "apiVersion": "2018-11-01",
-            "name": "[concat(parameters('sites_BethanysPieShopAppWin_name'), '/eb64d4d14dc7414b938cc63b7c26e905')]",
-            "location": "West Europe",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_BethanysPieShopAppWin_name'))]"
-            ],
-            "properties": {
-                "status": 4,
-                "author_email": "N/A",
-                "author": "N/A",
-                "deployer": "VSTS",
-                "message": "{\"type\":\"deployment\",\"commitId\":\"5b8ac41602e87abf44278c3f341d54c3e0dc6bff\",\"buildId\":\"26\",\"releaseId\":\"39\",\"buildNumber\":\"20210106.7\",\"releaseName\":\"Release-39\",\"repoProvider\":\"GitHub\",\"repoName\":\"fastsa85/BethanysPieShop\",\"collectionUrl\":\"https://dev.azure.com/SerhiiFastDeveloper/\",\"teamProject\":\"db7d12d5-1f91-48ba-b96d-aa500ecadcf1\",\"buildProjectUrl\":\"https://dev.azure.com/SerhiiFastDeveloper/db7d12d5-1f91-48ba-b96d-aa500ecadcf1\",\"repositoryUrl\":\"\",\"branch\":\"master\",\"teamProjectName\":\"BethanysPieShop\",\"slotName\":\"production\"}",
-                "start_time": "2021-01-06T09:23:13.3016366Z",
-                "end_time": "2021-01-06T09:23:14.1460665Z",
-                "active": false
-            }
-        },
-        {
-            "type": "Microsoft.Web/sites/hostNameBindings",
-            "apiVersion": "2018-11-01",
-            "name": "[concat(parameters('sites_BethanysPieShopAppWin_name'), '/', parameters('sites_BethanysPieShopAppWin_name'), '.azurewebsites.net')]",
-            "location": "West Europe",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_BethanysPieShopAppWin_name'))]"
-            ],
-            "properties": {
-                "siteName": "BethanysPieShopAppWin",
-                "hostNameType": "Verified"
+                "serverFarmId": "[concat('/subscriptions/', parameters('subscriptionId'),'/resourcegroups/', parameters('serverFarmResourceGroup'), '/providers/Microsoft.Web/serverfarms/', parameters('hostingPlanName'))]",
+                "clientAffinityEnabled": true
             }
         }
     ]

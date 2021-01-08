@@ -2,11 +2,32 @@
     "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "sites_BethanysPieShopAppWin_name": {
-            "value": null
+        "subscriptionId": {
+            "value": "f356fbf3-7715-4325-9854-3c501a6b770d"
         },
-        "serverfarms_BethanysPieShopWinPlan_externalid": {
-            "value": null
+        "name": {
+            "value": "BethanysPieShop01"
+        },
+        "location": {
+            "value": "West Europe"
+        },
+        "hostingPlanName": {
+            "value": "BethanysPieShopWinPlan"
+        },
+        "serverFarmResourceGroup": {
+            "value": "BethanysPieShopGroup"
+        },
+        "alwaysOn": {
+            "value": true
+        },
+        "currentStack": {
+            "value": "dotnetcore"
+        },
+        "phpVersion": {
+            "value": "OFF"
+        },
+        "errorLink": {
+            "value": "https://BethanysPieShop01.scm.azurewebsites.net/detectors?type=tools&name=eventviewer"
         }
     }
 }
