@@ -2,8 +2,9 @@ version: '3.5'
 
 networks:
     local:
-        name: local 
-            
+        name: local
+        
+services:  
     bethanyspieshop:
         build: BethanysPieShop/
         restart: always
